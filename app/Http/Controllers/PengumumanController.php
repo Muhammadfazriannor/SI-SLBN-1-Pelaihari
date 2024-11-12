@@ -70,7 +70,7 @@ class PengumumanController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->route('pengumumen.index')->with(['success' => 'Pengumuman Berhasil Disimpan!']);
     }
-
+    
     /**
      * Menampilkan detail pengumuman berdasarkan ID.
      *
