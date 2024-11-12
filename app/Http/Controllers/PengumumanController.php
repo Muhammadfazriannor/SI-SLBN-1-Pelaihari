@@ -156,4 +156,27 @@ class PengumumanController extends Controller
         // Redirect dengan pesan sukses
         return redirect()->route('pengumumen.index')->with(['success' => 'Pengumuman Berhasil Diperbarui!']);
     }
+  /**
+ * Hapus pengumuman berdasarkan ID.
+ *
+ * @param  mixed  $id
+ * @return RedirectResponse
+ */
+public function destroy($id): RedirectResponse
+{
+    // Ambil pengumuman berdasarkan ID
+    $pengumuman = Pengumuman::findOrFail($id);
+
+    // Hapus foto jika ada
+    if ($pengumuman->foto) {
+        Storage::delete('public/pengumumen/' . $pengumuman->foto);
+    }
+
+    // Hapus pengumuman dari database
+    $pengumuman->delete();
+
+    // Redirect dengan pesan sukses
+    return redirect()->route('pengumumen.index')->with(['success' => 'Pengumuman Berhasil Dihapus!']);
+}
+
 }
