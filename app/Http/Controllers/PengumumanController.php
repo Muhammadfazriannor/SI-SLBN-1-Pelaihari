@@ -1,29 +1,31 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Pengumuman;
+use App\Models\Pengumuman;  // Pastikan model yang digunakan benar
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage; // Pastikan Storage diimport
 
 class PengumumanController extends Controller
 {
     /**
-     * Display a listing of the Pengumuman.
+     * Menampilkan daftar pengumuman.
      *
      * @return View
      */
-    public function index() : View
+    public function index(): View
     {
-        // Get all pengumuman, paginated
+        // Ambil pengumuman terbaru dan paginasi
         $pengumuman = Pengumuman::latest()->paginate(10);
 
-        // Render view with pengumuman data
+        // Render view dengan data pengumuman
         return view('pengumumen.index', compact('pengumuman'));
     }
 
     /**
-     * Show the form for creating a new Pengumuman.
+     * Menampilkan form untuk membuat pengumuman baru.
      *
      * @return View
      */
@@ -33,14 +35,14 @@ class PengumumanController extends Controller
     }
 
     /**
-     * Store a newly created Pengumuman in storage.
+     * Menyimpan pengumuman baru ke dalam database.
      *
      * @param  Request  $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
-        // Validate the form data
+        // Validasi form
         $request->validate([
             'foto'    => 'required|image|mimes:jpeg,jpg,png|max:2048',
             'judul'   => 'required|min:5',
@@ -48,46 +50,112 @@ class PengumumanController extends Controller
             'tanggal' => 'required|date',
         ]);
 
-        // Sanitize and clean the 'isi' field before saving
+        // Sanitasi input 'isi' dan hanya izinkan tag yang aman
         $isi = $request->input('isi');
-        
-        // Remove unwanted HTML tags and only allow <p>, <b>, <i>, <u>, <br>, <ul>, <ol>, <li>
-        $isi = strip_tags($isi, '<p><b><i><u><br><ul><ol><li>');
+        $isi = strip_tags($isi, '<p><b><i><u><br><ul><ol><li>');  // Mengizinkan tag HTML tertentu
+        $isi = str_replace('&nbsp;', ' ', $isi);  // Mengganti &nbsp; dengan spasi biasa
+        $isi = trim($isi);  // Menghapus spasi ekstra
 
-        // Replace non-breaking spaces (&nbsp;) with regular spaces
-        $isi = str_replace('&nbsp;', ' ', $isi);
-
-        // Trim any unnecessary spaces
-        $isi = trim($isi);
-
-        // Upload the image if provided
+        // Menangani upload foto
         $foto = $request->file('foto');
         $fotoPath = $foto->storeAs('public/pengumumen', $foto->hashName());
 
-        // Create a new Pengumuman record
+        // Membuat pengumuman baru di database
         Pengumuman::create([
             'foto'    => $foto->hashName(),
             'judul'   => $request->judul,
-            'isi'     => $isi,  // Use the sanitized 'isi'
+            'isi'     => $isi,  // Gunakan isi yang sudah disanitasi
             'tanggal' => $request->tanggal,
         ]);
 
-        // Redirect to index with success message
+        // Redirect dengan pesan sukses
         return redirect()->route('pengumumen.index')->with(['success' => 'Pengumuman Berhasil Disimpan!']);
     }
-            /**
-     * Show the specified Pengumuman.
+
+    /**
+     * Menampilkan detail pengumuman berdasarkan ID.
      *
      * @param  string  $id
      * @return View
      */
     public function show(string $id): View
     {
-        // Get pengumuman by ID
+        // Ambil pengumuman berdasarkan ID
         $pengumuman = Pengumuman::findOrFail($id);
 
-        // Render view with pengumuman
+        // Render view dengan data pengumuman
         return view('pengumumen.show', compact('pengumuman'));
     }
 
+    /**
+     * Menampilkan form untuk mengedit pengumuman berdasarkan ID.
+     *
+     * @param  string  $id
+     * @return View
+     */
+    public function edit(string $id): View
+    {
+        // Ambil pengumuman berdasarkan ID
+        $pengumuman = Pengumuman::findOrFail($id);
+
+        // Render view dengan data pengumuman untuk diedit
+        return view('pengumumen.edit', compact('pengumuman'));
+    }
+
+    /**
+     * Memperbarui pengumuman yang sudah ada.
+     *
+     * @param  Request  $request
+     * @param  string  $id
+     * @return RedirectResponse
+     */
+    public function update(Request $request, string $id): RedirectResponse
+    {
+        // Validasi form
+        $request->validate([
+            'foto'    => 'image|mimes:jpeg,jpg,png|max:2048',
+            'judul'   => 'required|min:5',
+            'isi'     => 'required|min:10',
+            'tanggal' => 'required|date',
+        ]);
+
+        // Ambil pengumuman berdasarkan ID
+        $pengumuman = Pengumuman::findOrFail($id);
+
+        // Sanitasi input 'isi' dan hanya izinkan tag yang aman
+        $isi = $request->input('isi');
+        $isi = strip_tags($isi, '<p><b><i><u><br><ul><ol><li>');  // Mengizinkan tag HTML tertentu
+        $isi = str_replace('&nbsp;', ' ', $isi);  // Mengganti &nbsp; dengan spasi biasa
+        $isi = trim($isi);  // Menghapus spasi ekstra
+
+        // Jika ada file foto baru
+        if ($request->hasFile('foto')) {
+            // Upload foto baru
+            $foto = $request->file('foto');
+            $fotoPath = $foto->storeAs('public/pengumumen', $foto->hashName());
+
+            // Hapus foto lama jika ada
+            if ($pengumuman->foto) {
+                Storage::delete('public/pengumumen/' . $pengumuman->foto);
+            }
+
+            // Update pengumuman dengan foto baru
+            $pengumuman->update([
+                'foto'    => $foto->hashName(),
+                'judul'   => $request->judul,
+                'isi'     => $isi,
+                'tanggal' => $request->tanggal,
+            ]);
+        } else {
+            // Jika tidak ada foto baru, hanya update data lainnya
+            $pengumuman->update([
+                'judul'   => $request->judul,
+                'isi'     => $isi,
+                'tanggal' => $request->tanggal,
+            ]);
+        }
+
+        // Redirect dengan pesan sukses
+        return redirect()->route('pengumumen.index')->with(['success' => 'Pengumuman Berhasil Diperbarui!']);
+    }
 }
