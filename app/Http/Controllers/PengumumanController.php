@@ -75,4 +75,19 @@ class PengumumanController extends Controller
         // Redirect to index with success message
         return redirect()->route('pengumumen.index')->with(['success' => 'Pengumuman Berhasil Disimpan!']);
     }
+            /**
+     * Show the specified Pengumuman.
+     *
+     * @param  string  $id
+     * @return View
+     */
+    public function show(string $id): View
+    {
+        // Get pengumuman by ID
+        $pengumuman = Pengumuman::findOrFail($id);
+
+        // Render view with pengumuman
+        return view('pengumumen.show', compact('pengumuman'));
+    }
+
 }
