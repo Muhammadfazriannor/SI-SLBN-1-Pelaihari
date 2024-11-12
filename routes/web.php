@@ -3,11 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
-Route::get('/', function () {
     return view('dashboard');
 });
-
-//route resource for products
+//route resource for pengumuman
 Route::resource('/pengumumen', \App\Http\Controllers\PengumumanController::class);
