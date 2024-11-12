@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Pengumuman;  // Pastikan model yang digunakan benar
+use App\Models\Pengumuman;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage; // Pastikan Storage diimport
+use Illuminate\Support\Facades\Storage;
 
 class PengumumanController extends Controller
 {
@@ -50,9 +50,8 @@ class PengumumanController extends Controller
             'tanggal' => 'required|date',
         ]);
 
-        // Sanitasi input 'isi' dan hanya izinkan tag yang aman
+        // Ambil input 'isi' tanpa menggunakan strip_tags
         $isi = $request->input('isi');
-        $isi = strip_tags($isi, '<p><b><i><u><br><ul><ol><li>');  // Mengizinkan tag HTML tertentu
         $isi = str_replace('&nbsp;', ' ', $isi);  // Mengganti &nbsp; dengan spasi biasa
         $isi = trim($isi);  // Menghapus spasi ekstra
 
@@ -64,7 +63,7 @@ class PengumumanController extends Controller
         Pengumuman::create([
             'foto'    => $foto->hashName(),
             'judul'   => $request->judul,
-            'isi'     => $isi,  // Gunakan isi yang sudah disanitasi
+            'isi'     => $isi,  // Gunakan isi yang sudah dibersihkan, tanpa strip_tags
             'tanggal' => $request->tanggal,
         ]);
 
@@ -122,9 +121,8 @@ class PengumumanController extends Controller
         // Ambil pengumuman berdasarkan ID
         $pengumuman = Pengumuman::findOrFail($id);
 
-        // Sanitasi input 'isi' dan hanya izinkan tag yang aman
+        // Ambil input 'isi' tanpa menggunakan strip_tags
         $isi = $request->input('isi');
-        $isi = strip_tags($isi, '<p><b><i><u><br><ul><ol><li>');  // Mengizinkan tag HTML tertentu
         $isi = str_replace('&nbsp;', ' ', $isi);  // Mengganti &nbsp; dengan spasi biasa
         $isi = trim($isi);  // Menghapus spasi ekstra
 
