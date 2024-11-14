@@ -14,14 +14,14 @@
             <div class="col-md-12">
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
-                        <a href="{{ route('pengumumen.create') }}" class="btn btn-md btn-success mb-3">ADD PENGUMUMAN</a>
+                        <a href="{{ route('pengumumen.create') }}" class="btn btn-md btn-success mb-3">TAMBAH PENGUMUMAN</a>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th scope="col">IMAGE</th>
-                                    <th scope="col">TITLE</th>
-                                    <th scope="col">CONTENT</th>
-                                    <th scope="col">DATE</th>
+                                    <th scope="col">FOTO</th>
+                                    <th scope="col">JUDUL</th>
+                                    <th scope="col">ISI KONTEN </th>
+                                    <th scope="col">TANGGAL</th>
                                     <th scope="col" style="width: 20%">ACTIONS</th>
                                 </tr>
                             </thead>
@@ -36,7 +36,7 @@
                                         <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                                         <td class="text-center">
                                             <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('pengumumen.destroy', $item->id) }}" method="POST">
-                                                <a href="{{ route('pengumumen.show', $item->id) }}" class="btn btn-sm btn-dark">SHOW</a>
+                                                <a href="{{ route('pengumumen.show', $item->id) }}" class="btn btn-sm btn-dark">LIHAT</a>
                                                 <a href="{{ route('pengumumen.edit', $item->id) }}" class="btn btn-sm btn-primary">EDIT</a>
                                                 @csrf
                                                 @method('DELETE')
