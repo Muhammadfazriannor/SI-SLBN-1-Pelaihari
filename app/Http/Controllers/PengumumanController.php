@@ -21,8 +21,11 @@ class PengumumanController extends Controller
         // Ambil pengumuman terbaru dan paginasi
         $pengumuman = Pengumuman::latest()->paginate(10);
 
-        // Render view dengan data pengumuman
-        return view('pengumumen.index', compact('pengumuman'));
+        // Hitung jumlah pengumuman
+        $jumlahPengumuman = Pengumuman::count();
+
+        // Render view dengan data pengumuman dan jumlah pengumuman
+        return view('pengumumen.index', compact('pengumuman', 'jumlahPengumuman'));
     }
 
     /**
