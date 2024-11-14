@@ -14,13 +14,16 @@
             <div class="col-md-12">
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
+                        <!-- Tombol Kembali ke Dashboard -->
+                        <a href="{{ route('dashboard') }}" class="btn btn-md btn-secondary mb-3">KEMBALI KE DASHBOARD</a>
+
                         <a href="{{ route('pengumumen.create') }}" class="btn btn-md btn-success mb-3">TAMBAH PENGUMUMAN</a>
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">FOTO</th>
                                     <th scope="col">JUDUL</th>
-                                    <th scope="col">ISI KONTEN </th>
+                                    <th scope="col">ISI KONTEN</th>
                                     <th scope="col">TANGGAL</th>
                                     <th scope="col" style="width: 20%">ACTIONS</th>
                                 </tr>
