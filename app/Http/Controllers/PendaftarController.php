@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pendaftar;
-use App\Models\Seleksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
@@ -30,34 +29,20 @@ class PendaftarController extends Controller
             'tanggal_lahir' => 'required|date',
             'jenis_kelamin' => 'required',
             'alamat' => 'required|min:5',
-            'email' => 'required|email|unique:pendaftars',
+            'email' => 'required|email',
             'no_hp' => 'required|min:10',
         ]);
 
-        // Simpan data pendaftar
-        $pendaftar = Pendaftar::create([
-            'nama_lengkap' => $request->nama_lengkap,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'alamat' => $request->alamat,
-            'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'foto' => $request->foto ? $request->file('foto')->store('uploads') : null,
-        ]);
+        $pendaftar = new Pendaftar($request->except('foto'));
+        
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $pendaftar->foto = $foto->store('public/fotos');
+        }
 
-        // Masukkan data ke tabel seleksi secara otomatis
-        Seleksi::create([
-            'nama_lengkap' => $pendaftar->nama_lengkap,
-            'jenis_kelamin' => $pendaftar->jenis_kelamin,
-            'tanggal_lahir' => $pendaftar->tanggal_lahir,
-            'alamat' => $pendaftar->alamat,
-            'email' => $pendaftar->email,
-            'no_hp' => $pendaftar->no_hp,
-            'foto' => $pendaftar->foto,
-            'status' => 'lihat', // Status default 'lihat'
-        ]);
+        $pendaftar->save();
 
-        return redirect()->route('pendaftars.index')->with('success', 'Data pendaftar berhasil disimpan!');
+        return redirect()->route('pendaftars.index')->with('success', 'Data Berhasil Disimpan!');
     }
 
     public function show(Pendaftar $pendaftar): View
@@ -82,12 +67,10 @@ class PendaftarController extends Controller
             'no_hp' => 'required|min:10',
         ]);
 
-        // Perbarui data pendaftar
         $pendaftar->fill($request->except('foto'));
 
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            Storage::delete($pendaftar->foto);
+            Storage::delete($pendaftar->foto); // Hapus foto lama jika ada
             $foto = $request->file('foto');
             $pendaftar->foto = $foto->store('public/fotos');
         }
@@ -99,8 +82,7 @@ class PendaftarController extends Controller
 
     public function destroy(Pendaftar $pendaftar): RedirectResponse
     {
-        // Hapus foto jika ada
-        Storage::delete($pendaftar->foto);
+        Storage::delete($pendaftar->foto); // Hapus foto
         $pendaftar->delete();
 
         return redirect()->route('pendaftars.index')->with('success', 'Data Berhasil Dihapus!');
