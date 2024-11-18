@@ -3,12 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PengumumanController;
 use App\Http\Controllers\PendaftarController;
-use App\Models\Pengumuman;
-<<<<<<< HEAD
 use App\Http\Controllers\SeleksiController;
-=======
+use App\Models\Pengumuman;
 use App\Models\Pendaftar; // Pastikan model Pendaftar sudah diimport
->>>>>>> 1bb43a3fd518b8e8d922a245128f33b0545dfaf2
 
 // Rute untuk dashboard (utama)
 Route::get('/', function () {
@@ -21,7 +18,6 @@ Route::get('/', function () {
     // Kirimkan ke view dashboard
     return view('dashboard.dashboard', compact('jumlahPengumuman', 'jumlahPendaftar'));
 })->name('dashboard'); // Memberikan nama 'dashboard' pada rute ini
-
 
 // Rute resource untuk pengumuman dan pendaftar
 Route::resource('/pengumumen', PengumumanController::class);
