@@ -22,6 +22,8 @@ Route::get('/', function () {
 // Rute resource untuk pengumuman dan pendaftar
 Route::resource('/pengumumen', PengumumanController::class);
 Route::resource('/pendaftars', PendaftarController::class);
+Route::get('pendaftars/{pendaftar}', [PendaftarController::class, 'show'])->name('pendaftars.show');
+
 
 Route::get('/seleksi', [SeleksiController::class, 'index'])->name('seleksi.index');
 Route::get('/seleksi/proses', [SeleksiController::class, 'prosesSeleksi'])->name('seleksi.proses');
