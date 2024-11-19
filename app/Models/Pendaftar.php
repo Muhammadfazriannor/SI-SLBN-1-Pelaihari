@@ -18,4 +18,9 @@ class Pendaftar extends Model
         'no_hp',
         'foto',
     ];
+
+    public function seleksi()
+    {
+        return $this->hasOne(Seleksi::class);
+    }
 }
