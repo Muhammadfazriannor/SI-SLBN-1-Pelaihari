@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,13 +10,12 @@ class Seleksi extends Model
     use HasFactory;
 
     protected $fillable = [
-        'nama_lengkap',
-        'jenis_kelamin',
-        'tanggal_lahir',
-        'alamat',
-        'email',
-        'no_hp',
-        'foto',
-        'lolos',
+        'pendaftar_id', // Relasi ke Pendaftar
+        'status',       // Status seleksi (diterima, tidak diterima, lihat)
     ];
+
+    public function pendaftar()
+    {
+        return $this->belongsTo(Pendaftar::class);
+    }
 }
