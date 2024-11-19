@@ -10,6 +10,22 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="{{ asset('template/css/styles.css') }}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+        <style>
+            /* CSS untuk tabel */
+            .table th, .table td {
+                text-align: center; /* Rata tengah untuk teks */
+            }
+
+            /* CSS untuk kolom Email */
+            .email-column {
+                width: 180px; /* Lebar kolom Email */
+                max-width: 180px; /* Maksimal lebar kolom */
+                overflow: hidden; /* Sembunyikan konten yang melampaui */
+                text-overflow: ellipsis; /* Tampilkan elipsis jika teks terlalu panjang */
+                white-space: nowrap; /* Mencegah teks untuk membungkus ke baris baru */
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -55,46 +71,6 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-user-check"></i></div>  <!-- Ikon seleksi -->
                                 Seleksi Siswa/Siswi
                             </a>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
-                                <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                                        Authentication
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
-                                        </nav>
-                                    </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapseError" aria-expanded="false" aria-controls="pagesCollapseError">
-                                        Error
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">401 Page</a>
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
-                                        </nav>
-                                    </div>
-                                </nav>
-                            </div>
-                            <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
-                            <a class="nav-link" href="tables.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
-                                Tables
-                            </a>
                         </div>
                     </div>
                     <div class="sb-sidenav-footer">
@@ -105,71 +81,75 @@
             </div>
             <div id="layoutSidenav_content">
                 <main>
-                <div class="container">
-                    <h1>Hasil Seleksi</h1>
-
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
+                    <div class="container mt-5">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card border-0 shadow-sm rounded">
+                                    <div class="card-body">
+                                        <!-- Tombol Kembali ke Dashboard -->
+                                        <a href="{{ route('dashboard') }}" class="btn btn-md btn-secondary mb-3">KEMBALI KE DASHBOARD</a>
+                                        <!-- Tabel Data Seleksi -->
+                                        <h3 class="mb-4">Hasil Seleksi</h3>
+                                        @if (session('success'))
+                                            <div class="alert alert-success">
+                                                {{ session('success') }}
+                                            </div>
+                                        @endif
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">No</th>
+                                                    <th scope="col">Nama Lengkap</th>
+                                                    <th scope="col">Jenis Kelamin</th>
+                                                    <th scope="col">Tanggal Lahir</th>
+                                                    <th scope="col">Alamat</th>
+                                                    <th scope="col" class="email-column">Email</th>  <!-- Kolom Email dengan kelas email-column -->
+                                                    <th scope="col">No HP</th>
+                                                    <th scope="col">Foto</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col" style="width: 20%">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($seleksis as $key => $seleksi)
+                                                    <tr>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>{{ $seleksi->pendaftar->nama_lengkap }}</td>
+                                                        <td>{{ $seleksi->pendaftar->jenis_kelamin }}</td>
+                                                        <td>{{ $seleksi->pendaftar->tanggal_lahir }}</td>
+                                                        <td>{{ $seleksi->pendaftar->alamat }}</td>
+                                                        <td class="email-column">{{ $seleksi->pendaftar->email }}</td>  <!-- Kolom Email -->
+                                                        <td>{{ $seleksi->pendaftar->no_hp }}</td>
+                                                        <td>
+                                                            @if ($seleksi->pendaftar->foto)
+                                                                <img src="{{ asset('storage/' . $seleksi->pendaftar->foto) }}" alt="Foto" width="100">
+                                                            @else
+                                                                Tidak Ada Foto
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if ($seleksi->status == 'diterima')
+                                                                <span class="badge bg-success">Diterima</span>
+                                                            @elseif ($seleksi->status == 'tidak diterima')
+                                                                <span class="badge bg-danger">Tidak Diterima</span>
+                                                            @else
+                                                                <span class="badge bg-warning">Lihat</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('seleksi.updateStatus', ['seleksi' => $seleksi->id, 'status' => 'diterima']) }}" class="btn btn-success btn-sm">Diterima</a>
+                                                            <a href="{{ route('seleksi.updateStatus', ['seleksi' => $seleksi->id, 'status' => 'tidak diterima']) }}" class="btn btn-danger btn-sm">Tidak Diterima</a>
+                                                            <a href="{{ route('seleksi.updateStatus', ['seleksi' => $seleksi->id, 'status' => 'lihat']) }}" class="btn btn-warning btn-sm">Lihat</a>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    @endif
-
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nama Lengkap</th>
-                                <th>Jenis Kelamin</th>
-                                <th>Tanggal Lahir</th>
-                                <th>Alamat</th>
-                                <th>Email</th>
-                                <th>No HP</th>
-                                <th>Foto</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($seleksis as $key => $seleksi)
-                                <tr>
-                                    <td>{{ $key + 1 }}</td>
-                                    <td>{{ $seleksi->pendaftar->nama_lengkap }}</td>
-                                    <td>{{ $seleksi->pendaftar->jenis_kelamin }}</td>
-                                    <td>{{ $seleksi->pendaftar->tanggal_lahir }}</td>
-                                    <td>{{ $seleksi->pendaftar->alamat }}</td>
-                                    <td>{{ $seleksi->pendaftar->email }}</td>
-                                    <td>{{ $seleksi->pendaftar->no_hp }}</td>
-                                    <td>
-                                        @if ($seleksi->pendaftar->foto)
-                                            <img src="{{ asset('storage/' . $seleksi->pendaftar->foto) }}" alt="Foto" width="100">
-                                        @else
-                                            Tidak Ada Foto
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if ($seleksi->status == 'diterima')
-                                            <span class="badge bg-success">Diterima</span>
-                                        @elseif ($seleksi->status == 'tidak diterima')
-                                            <span class="badge bg-danger">Tidak Diterima</span>
-                                        @else
-                                            <span class="badge bg-warning">Lihat</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('seleksi.updateStatus', ['seleksi' => $seleksi->id, 'status' => 'diterima']) }}" class="btn btn-success btn-sm">Diterima</a>
-                                        <a href="{{ route('seleksi.updateStatus', ['seleksi' => $seleksi->id, 'status' => 'tidak diterima']) }}" class="btn btn-danger btn-sm">Tidak Diterima</a>
-                                        <a href="{{ route('seleksi.updateStatus', ['seleksi' => $seleksi->id, 'status' => 'lihat']) }}" class="btn btn-warning btn-sm">Lihat</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-
-                <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-                <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+                    </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid px-4">
@@ -187,10 +167,5 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="assets/demo/chart-area-demo.js"></script>
-        <script src="assets/demo/chart-bar-demo.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
     </body>
 </html>
