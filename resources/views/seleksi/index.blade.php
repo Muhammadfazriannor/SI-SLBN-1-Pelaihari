@@ -29,15 +29,15 @@
             @foreach ($seleksis as $key => $seleksi)
                 <tr>
                     <td>{{ $key + 1 }}</td>
-                    <td>{{ $seleksi->nama_lengkap }}</td>
-                    <td>{{ $seleksi->jenis_kelamin }}</td>
-                    <td>{{ $seleksi->tanggal_lahir }}</td>
-                    <td>{{ $seleksi->alamat }}</td>
-                    <td>{{ $seleksi->email }}</td>
-                    <td>{{ $seleksi->no_hp }}</td>
+                    <td>{{ $seleksi->pendaftar->nama_lengkap }}</td>
+                    <td>{{ $seleksi->pendaftar->jenis_kelamin }}</td>
+                    <td>{{ $seleksi->pendaftar->tanggal_lahir }}</td>
+                    <td>{{ $seleksi->pendaftar->alamat }}</td>
+                    <td>{{ $seleksi->pendaftar->email }}</td>
+                    <td>{{ $seleksi->pendaftar->no_hp }}</td>
                     <td>
-                        @if ($seleksi->foto)
-                            <img src="{{ asset('storage/' . $seleksi->foto) }}" alt="Foto" width="100">
+                        @if ($seleksi->pendaftar->foto)
+                            <img src="{{ asset('storage/' . $seleksi->pendaftar->foto) }}" alt="Foto" width="100">
                         @else
                             Tidak Ada Foto
                         @endif
