@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Data Pengumuman</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body style="background: lightgray">
+@extends('layouts.app')
 
+@section('title', 'Tambah Pengumuman')
+
+@section('content')
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
@@ -16,8 +10,8 @@
                     <div class="card-body">
                         <!-- Tombol Kembali ke Dashboard -->
                         <a href="{{ route('dashboard') }}" class="btn btn-md btn-secondary mb-3">KEMBALI KE DASHBOARD</a>
-
                         <a href="{{ route('pengumumen.create') }}" class="btn btn-md btn-success mb-3">TAMBAH PENGUMUMAN</a>
+                        
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
@@ -48,9 +42,13 @@
                                         </td>
                                     </tr>
                                 @empty
-                                    <div class="alert alert-danger">
-                                        Data Pengumuman belum Tersedia.
-                                    </div>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <div class="alert alert-danger">
+                                                Data Pengumuman belum Tersedia.
+                                            </div>
+                                        </td>
+                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -60,10 +58,10 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <script>
         // Message with sweetalert
         @if(session('success'))
@@ -84,6 +82,4 @@
             });
         @endif
     </script>
-
-</body>
-</html>
+@endsection
