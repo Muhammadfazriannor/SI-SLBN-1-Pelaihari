@@ -1,18 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <title>Pendaftaran PPDB</title>
+    <title>@yield('title', 'Dashboard - SLBN 1 PELAIHARI')</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('template/css/styles.css') }}" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        @yield('content')
+<body class="sb-nav-fixed">
+    <!-- Navbar & Sidebar -->
+    @include('partials.navbar') <!-- Navbar dan Sidebar disertakan di sini -->
+
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            <!-- Sidebar Menu -->
+            @include('partials.sidebar') <!-- Menggunakan partials untuk sidebar -->
+        </div>
+        <div id="layoutSidenav_content">
+            <main>
+                <!-- Konten halaman yang berubah -->
+                <div class="container-fluid mt-4">
+                    @yield('content') <!-- Konten dinamis halaman -->
+                </div>
+            </main>
+        </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Footer -->
+    @include('partials.footer')
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
