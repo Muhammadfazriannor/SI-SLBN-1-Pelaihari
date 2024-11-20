@@ -96,7 +96,7 @@
                             <!-- Foto Berkas ABK Field -->
                             <div class="form-group mb-3">
                                 <label class="font-weight-bold">Foto Berkas ABK</label>
-                                <input type="file" class="form-control @error('foto') is-invalid @enderror" name="foto">
+                                <input type="file" class="form-control @error('foto') is-invalid @enderror" name="foto" required>
                                 
                                 @error('foto')
                                     <div class="alert alert-danger mt-2">{{ $message }}</div>
