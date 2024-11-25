@@ -6,6 +6,7 @@ use App\Http\Controllers\PendaftarController;
 use App\Http\Controllers\SeleksiController;
 use App\Models\Pengumuman;
 use App\Models\Pendaftar; // Pastikan model Pendaftar sudah diimport
+use App\Http\Controllers\AuthController;
 
 // Rute untuk halaman utama
 Route::get('/', function () {
@@ -34,3 +35,9 @@ Route::get('/pendaftars', [PendaftarController::class, 'index'])->name('pendafta
 Route::get('/seleksi', [SeleksiController::class, 'index'])->name('seleksi.index');
 Route::get('/seleksi/proses', [SeleksiController::class, 'prosesSeleksi'])->name('seleksi.proses');
 Route::get('/seleksi/update-status/{seleksi}/{status}', [SeleksiController::class, 'updateStatus'])->name('seleksi.updateStatus');
+
+Route::get('/register/admin', [AuthController::class, 'showAdminRegisterForm'])->name('register.admin');
+Route::post('/register/admin', [AuthController::class, 'registerAdmin']);
+
+Route::get('/register/siswa', [AuthController::class, 'showSiswaRegisterForm'])->name('register.siswa');
+Route::post('/register/siswa', [AuthController::class, 'registerSiswa']);
