@@ -16,7 +16,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Form Register -->
-                        <form action="{{ url('/register') }}" method="POST">
+                        <form action="{{ url('/register/admin') }}" method="POST">
                             @csrf
                             
                             <!-- Name Field -->

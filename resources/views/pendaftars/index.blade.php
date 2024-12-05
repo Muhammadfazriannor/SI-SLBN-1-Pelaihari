@@ -71,7 +71,7 @@
                                 <div class="card border-0 shadow-sm rounded">
                                     <div class="card-body">
                                         <!-- Judul Halaman -->
-                                        <h2 class="mb-4">Tambah Pendaftaran</h2>
+                                        <h2 class="mb-4">Data Pendaftaran</h2>
 
                                         <!-- Tombol kembali ke dashboard -->
                                         <a href="{{ route('dashboard') }}" class="btn btn-md btn-secondary mb-3">KEMBALI KE DASHBOARD</a>

@@ -13,7 +13,7 @@
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-        <form method="POST" action="{{ route('login') }}">
+        <form action="{{ route('login.admin.submit') }}" method="POST">
             @csrf
             <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
@@ -24,7 +24,7 @@
                 <input type="password" name="password" class="form-control" required>
             </div>
             <button class="btn btn-primary w-100">Login</button>
-            <a href="{{ route('register') }}" class="btn btn-link mt-2">Register</a>
+            <a href="{{ route('register.admin') }}" class="btn btn-link mt-2">Register</a>
         </form>
     </div>
 </div>
