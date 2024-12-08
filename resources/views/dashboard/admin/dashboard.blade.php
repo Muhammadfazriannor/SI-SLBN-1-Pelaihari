@@ -11,6 +11,7 @@
         <link href="{{ asset('template/css/styles.css') }}" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
+    
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
@@ -33,6 +34,14 @@
                 </li>
             </ul>
         </nav>
+        <div class="container mt-4">
+    <h3>Pengumuman Terbaru</h3>
+    <ul id="announcement-list" class="list-group">
+        <!-- Pengumuman akan dimuat di sini secara dinamis -->
+    </ul>
+</div>
+
+        <form action="{{ route('admin.announcements.store') }}" method="POST">
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
@@ -168,6 +177,15 @@
         <script src="assets/demo/chart-area-demo.js"></script>
         <script src="assets/demo/chart-bar-demo.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
-        <script src="js/datatables-simple-demo.js"></script>
+        <script src="js/datatables-simple-demo.js">
+            Echo.channel('announcements')
+    .listen('.new-announcement', (event) => {
+        const announcementList = document.getElementById('announcement-list');
+        const announcementItem = document.createElement('li');
+        announcementItem.className = 'list-group-item';
+        announcementItem.innerText = `${event.announcement.title}: ${event.announcement.content}`;
+        announcementList.prepend(announcementItem);
+    });
+        </script>
     </body>
 </html>

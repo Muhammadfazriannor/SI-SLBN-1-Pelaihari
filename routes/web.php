@@ -7,6 +7,11 @@ use App\Http\Controllers\PendaftarController;
 use App\Http\Controllers\SeleksiController;
 use App\Models\Pengumuman;
 use App\Models\Pendaftar;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AnnouncementController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
+
 
 // Rute untuk halaman utama
 Route::get('/', function () {
@@ -22,6 +27,14 @@ Route::get('/dashboard', function () {
     // Kirimkan ke view dashboard
     return view('dashboard.dashboard', compact('jumlahPengumuman', 'jumlahPendaftar'));
 })->name('dashboard')->middleware('auth'); // Middleware auth agar hanya bisa diakses setelah login
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+});
+
+Route::middleware(['auth', 'role:user'])->group(function () {
+    Route::get('/user/dashboard', [UserController::class, 'index'])->name('user.dashboard');
+});
 
 // Rute resource untuk pengumuman dan pendaftar
 Route::resource('/pengumumen', PengumumanController::class);
@@ -51,4 +64,8 @@ Route::get('/register', function () {
 })->name('register');
 // Rute untuk proses registrasi
 Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::resource('admin/announcements', AnnouncementController::class);
+Route::resource('pendaftars', PendaftarController::class);
 
